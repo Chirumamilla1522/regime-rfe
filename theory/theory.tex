@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newcommand{\cR}{\mathcal R_1}
+\title{Recurring-Regime Reward-Free Exploration: Theory Synopsis}
+\date{}
+\begin{document}
+\maketitle
+
+\paragraph{Protocol.}
+An episodic finite MDP has one of finitely many transition kernels.  Its hidden
+kernel is constant within an episode and follows an unknown piecewise-constant
+schedule across training episodes.  Training and \(q\) deployment-diagnostic
+episodes contain no rewards.  The deployment kernel is fixed and previously
+seen.  Only after diagnosis is an arbitrary reward \(r\in\cR\), with pathwise
+total reward at most one, revealed.
+
+\paragraph{Segmentation interface.}
+On an event of probability \(1-\delta_{\rm seg}\), accepted episodes are pure,
+recurrences are matched up to one label permutation, at most \(B\) episodes
+at each end of every true block are quarantined, every mode meets its RFE
+quota, and all confidence sets cover jointly under adaptive collection.
+This is a contract, not a proved detector theorem.
+
+\begin{theorem}[Conditional modular bound]
+If segmentation succeeds, every per-mode stationary RFE planner has uniform
+error \(\eta\) with failure \(\delta_{\rm rfe}\), and deployment
+identification fails with probability at most \(\delta_{\rm id}\), then
+\[
+\Pr\!\left\{\sup_{r\in\cR}
+V_{P^{(Z)}}^\star(r)-V_{P^{(Z)}}^{\widehat\pi_r}(r)\le\eta\right\}
+\ge1-\delta_{\rm seg}-M_\star\delta_{\rm rfe}-\delta_{\rm id}.
+\]
+\end{theorem}
+\begin{proof}
+Intersect segmentation, all \(M_\star\) RFE success events, and correct
+identification.  A union bound gives the probability; on the intersection the
+selected planner is uniformly \(\eta\)-optimal for the deployment kernel.
+\end{proof}
+
+\begin{theorem}[Binary diagnostic lower bound]
+For any adaptive diagnostic strategy \(\sigma\), pair \(m,\ell\), and test,
+\[
+\Pr_m(\ell)+\Pr_\ell(m)\ge
+\tfrac12\exp\{-D_{\rm KL}(\mathbb P_m^\sigma\Vert
+\mathbb P_\ell^\sigma)\}.
+\]
+\end{theorem}
+\begin{proof}
+The minimum sum of testing errors is \(1-\mathrm{TV}\).  Apply the
+Bretagnolle--Huber inequality and
+\(1-\sqrt{1-x}\ge x/2\).
+\end{proof}
+
+\paragraph{Limits.}
+With no deployment observations, two deterministic modes with reversed good
+actions force worst-case loss at least \(1/2\), even if both models were
+learned exactly.  A single-mode stationary RFE lower bound embeds into any one
+mode, but multiplying it by the number of modes requires a separate adaptive
+direct-sum proof.  Detector-specific segmentation, robust estimated-model
+diagnosis, the direct sum, and minimax matching are explicitly unproved
+targets.
+
+\paragraph{Full details.}
+See \texttt{formal\_model.md}, \texttt{algorithm.md},
+\texttt{theorem\_targets.md}, \texttt{proof\_roadmap.md}, and
+\texttt{bibliography\_ledger.md}.
+\end{document}

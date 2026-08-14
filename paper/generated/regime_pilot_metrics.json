@@ -1,0 +1,77 @@
+{
+  "gate_checks": {
+    "all_values_and_gaps_in_unit_interval": true,
+    "deployment_acceptance_at_least_half": true,
+    "paired_bootstrap_ci_excludes_zero": true,
+    "paired_improvement_at_least_margin": false,
+    "positive_recurrence_sample_savings": true,
+    "ten_or_more_seeds": true
+  },
+  "mean_recurrence_sample_savings": 48.12,
+  "n_units": 40,
+  "paired_gap_improvement": {
+    "ci95_high": 0.0017808638900388702,
+    "ci95_low": 0.0005655321113187463,
+    "mean": 0.001104541295014381,
+    "required_margin": 0.01
+  },
+  "positive_saving_fraction": 0.995,
+  "recurrence_aware_diagnosis_accuracy": 1,
+  "recurrence_aware_learned_mode_accuracy": 1,
+  "recurrence_aware_mean_alarms": 6.55,
+  "recurrence_aware_mean_reuse_events": 5.05,
+  "recurrence_gate_passed": false,
+  "recurrence_saving_rows": 200,
+  "reward_normalization": {
+    "pathwise_total_maximum": 1.0,
+    "per_stage_maximum": 0.05,
+    "stages": 20
+  },
+  "runtime_seconds": 22.086155913944822,
+  "source_config_hash": "6e54042d78e70be4",
+  "summary": [
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "pooled",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.13472096203045988
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "restart_no_reuse",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.002482741315781101
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "cluster_no_quarantine",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.0012689082128759925
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "recurrence_aware",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.00137820002076672
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "oracle_boundary",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.0016274126428690138
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "oracle_mode",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.0015664962412831906
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "sliding_window",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.15457871487475774
+    }
+  ],
+  "zero_saving_fraction": 0.005
+}

@@ -1,0 +1,122 @@
+{
+  "design": {
+    "budgets": [
+      500,
+      1500,
+      4000
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "drift": "goal_shift",
+    "note": "predeclared diagnostic; not a selection sweep"
+  },
+  "summary": [
+    {
+      "budget": 500,
+      "method": "fixed_count",
+      "phase": "pre",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 500,
+      "method": "fixed_count",
+      "phase": "post",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 500,
+      "method": "time_count",
+      "phase": "pre",
+      "mean_success": 0.3333333333333333
+    },
+    {
+      "budget": 500,
+      "method": "time_count",
+      "phase": "post",
+      "mean_success": 0.3333333333333333
+    },
+    {
+      "budget": 1500,
+      "method": "fixed_count",
+      "phase": "pre",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 1500,
+      "method": "fixed_count",
+      "phase": "post",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 1500,
+      "method": "time_count",
+      "phase": "pre",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 1500,
+      "method": "time_count",
+      "phase": "post",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 4000,
+      "method": "fixed_count",
+      "phase": "pre",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 4000,
+      "method": "fixed_count",
+      "phase": "post",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 4000,
+      "method": "time_count",
+      "phase": "pre",
+      "mean_success": 0.0
+    },
+    {
+      "budget": 4000,
+      "method": "time_count",
+      "phase": "post",
+      "mean_success": 0.3333333333333333
+    }
+  ],
+  "task_reachability": [
+    {
+      "seed": 0,
+      "phase": "pre",
+      "goal_reachable": true
+    },
+    {
+      "seed": 0,
+      "phase": "post",
+      "goal_reachable": true
+    },
+    {
+      "seed": 1,
+      "phase": "pre",
+      "goal_reachable": true
+    },
+    {
+      "seed": 1,
+      "phase": "post",
+      "goal_reachable": true
+    },
+    {
+      "seed": 2,
+      "phase": "pre",
+      "goal_reachable": true
+    },
+    {
+      "seed": 2,
+      "phase": "post",
+      "goal_reachable": true
+    }
+  ]
+}

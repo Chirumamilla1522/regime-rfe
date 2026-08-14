@@ -1,0 +1,330 @@
+{
+  "benchmark_gate_passed": true,
+  "config": {
+    "gate_bootstrap_samples": 20000,
+    "gate_gap_margin": 0.01,
+    "profile": "pilot",
+    "require_pooling_loss": true,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "tasks": [
+      "swap_chain",
+      "riverswim",
+      "deepsea",
+      "four_rooms"
+    ],
+    "value_gap_target": 0.05
+  },
+  "config_hash": "90f18f4bd17c4218",
+  "gate_checks": {
+    "all_values_and_gaps_in_unit_interval": true,
+    "deployment_acceptance_at_least_half": true,
+    "paired_bootstrap_ci_excludes_zero": true,
+    "paired_improvement_at_least_margin": true,
+    "positive_recurrence_sample_savings": true,
+    "recurrence_beats_pooling": true,
+    "ten_or_more_seeds": true
+  },
+  "mean_recurrence_sample_savings": 52.746153846153845,
+  "n_units": 40,
+  "paired_gap_improvement": {
+    "ci95_high": 0.10885535932555357,
+    "ci95_low": 0.040109688921761415,
+    "mean": 0.07266445856826952,
+    "required_margin": 0.01
+  },
+  "per_task_summary": {
+    "deepsea": [
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "pooled",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.636191994834275
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "restart_no_reuse",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.04207692034642298
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "cluster_no_quarantine",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.02103846017321149
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "recurrence_aware",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.039248850053223275
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_boundary",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.0
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_mode",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.0
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "sliding_window",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.46093776152258714
+      }
+    ],
+    "four_rooms": [
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "pooled",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.005232939364048039
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "restart_no_reuse",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.21477863022944094
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "cluster_no_quarantine",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.028641847249393705
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "recurrence_aware",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.07599272230440605
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_boundary",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.005303052685513332
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_mode",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.024572483417766362
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "sliding_window",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.41581366283433707
+      }
+    ],
+    "riverswim": [
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "pooled",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.5145444500664917
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "restart_no_reuse",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.27500520314258076
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "cluster_no_quarantine",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.09413837325563149
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "recurrence_aware",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.1636309382427557
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_boundary",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.11895100585005698
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_mode",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.07586257254307205
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "sliding_window",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.5571027877195878
+      }
+    ],
+    "swap_chain": [
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "pooled",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.17453383774127404
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "restart_no_reuse",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.0394936084828552
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "cluster_no_quarantine",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.004238265261031787
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "recurrence_aware",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.001824017327836719
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_boundary",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.002134494994301207
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "oracle_mode",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.0021720565418032536
+      },
+      {
+        "deployment_accept_rate": 1.0,
+        "method": "sliding_window",
+        "n_units": 10,
+        "worst_reward_value_gap": 0.2266842553907562
+      }
+    ]
+  },
+  "protocol": "rfe_recurrent_bench_v2",
+  "runtime_seconds": 9.914108754892368,
+  "summary": [
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "pooled",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.3326258055015222
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "restart_no_reuse",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.14283859055032497
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "cluster_no_quarantine",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.037014236484817116
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "recurrence_aware",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.07017413198205544
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "oracle_boundary",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.031597138382467874
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "oracle_mode",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.025651778125660413
+    },
+    {
+      "deployment_accept_rate": 1.0,
+      "method": "sliding_window",
+      "n_units": 40,
+      "worst_reward_value_gap": 0.41513461686681713
+    }
+  ],
+  "task_specs": {
+    "deepsea": {
+      "action_count": 2,
+      "confirmation_steps": 16,
+      "cycles": 4,
+      "deployment_prefix": 48,
+      "dwell": 80,
+      "horizon": 16,
+      "mode_count": 2,
+      "quarantine_steps": 6,
+      "slip": 0.1,
+      "state_count": 8,
+      "task": "deepsea"
+    },
+    "four_rooms": {
+      "action_count": 4,
+      "confirmation_steps": 24,
+      "cycles": 4,
+      "deployment_prefix": 120,
+      "dwell": 160,
+      "horizon": 16,
+      "mode_count": 2,
+      "quarantine_steps": 10,
+      "slip": 0.1,
+      "state_count": 20,
+      "task": "four_rooms"
+    },
+    "riverswim": {
+      "action_count": 2,
+      "confirmation_steps": 16,
+      "cycles": 5,
+      "deployment_prefix": 36,
+      "dwell": 80,
+      "horizon": 20,
+      "mode_count": 2,
+      "quarantine_steps": 6,
+      "slip": 0.0,
+      "state_count": 6,
+      "task": "riverswim"
+    },
+    "swap_chain": {
+      "action_count": 2,
+      "confirmation_steps": 24,
+      "cycles": 4,
+      "deployment_prefix": 54,
+      "dwell": 120,
+      "horizon": 20,
+      "mode_count": 2,
+      "quarantine_steps": 8,
+      "separation": 0.9,
+      "state_count": 9,
+      "task": "swap_chain"
+    }
+  },
+  "tasks": [
+    "swap_chain",
+    "riverswim",
+    "deepsea",
+    "four_rooms"
+  ]
+}
