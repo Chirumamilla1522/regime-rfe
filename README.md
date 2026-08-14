@@ -1,187 +1,260 @@
-# Reward-Free Exploration under Gridworld Drift
+# Regime-Conditional Reward-Free Exploration
 
-This repository is a small, reproducible study of frozen representations under
-nonstationary gridworld dynamics. The implemented explorer is a **count-bonus
-heuristic**, not UCRL-RFE: it does not perform optimistic model-based planning.
-The time-conditioned encoder observes a normalized public clock, but never the
-drift boundary, active goal/map, or an oracle drift flag.
+[![Python](https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Tests](https://img.shields.io/badge/tests-pytest-0A9B47?logo=pytest&logoColor=white)](#try-it)
+[![Env](https://img.shields.io/badge/env-Gymnasium%20%2B%20MiniGrid-black)](#pick-a-study)
+[![Code](https://img.shields.io/badge/remote-code%20only-555)](https://github.com/Chirumamilla1522/regime-rfe)
 
-The repository now also contains a stronger, separate experimental direction:
-an online latent-regime signal inferred only from forward-model residuals,
-matched stationary/inferred/oracle-context empirical planners, and a reliable
-tabular planning instrument. The previous clock/DQN outputs remain unchanged.
-See `EXPERIMENTS.md`.
+Infer a **latent dynamics regime** from transitions `(state, action, next_state)` only. Rewards are attached later. No method sees the drift boundary, active goal/map, or an oracle regime flag.
 
-## Canonical implementation
+```mermaid
+flowchart LR
+  A[Collect without rewards] --> B[Infer or match regimes]
+  B --> C[Fit transition models]
+  C --> D[Reveal a reward]
+  D --> E[Plan and diagnose]
+```
 
-`run.py` and the `rfe_drift/` package are canonical. The root `rfe_drift.py` is
-a deprecated historical prototype retained for history; do not use it for
-reported results. `run_drift_experiments.py` is also legacy visualization code.
+<p align="center">
+  <a href="#try-it"><strong>Try it</strong></a>
+  ·
+  <a href="#pick-a-study"><strong>Pick a study</strong></a>
+  ·
+  <a href="#what-gets-written"><strong>Outputs</strong></a>
+  ·
+  <a href="#layout"><strong>Layout</strong></a>
+  ·
+  <a href="#checked-results"><strong>Checked results</strong></a>
+</p>
 
-Corrected semantics include:
-
-- one global drift clock that survives episode resets;
-- the transition reaching the sudden-drift index uses the drifted model;
-- reachable-state, rather than all-cell, coverage;
-- explicit temporal metadata in conditioned representation training;
-- identical clocks for environment transitions and encoder evaluation;
-- seeded Python, NumPy, PyTorch, environment, collector, replay, and policies;
-- raw episode/seed CSV and JSON output with bounded 95% cluster-bootstrap
-  intervals over independent seed means.
-
-## Install and verify
+## Try it
 
 ```bash
+git clone https://github.com/Chirumamilla1522/regime-rfe.git
+cd regime-rfe
 python3 -m pip install -r requirements.txt
 python3 -m pytest -q
+```
 
-# New CPU-only inferred-regime pilot (tests included)
+Then run one command from the chooser below. Start with **smoke test** if you just want to confirm the harness works.
+
+<details open>
+<summary><strong>Smoke test</strong> — one seed, seconds on CPU</summary>
+
+```bash
+python3 run.py --quick --seeds 0 --output results/smoke
+```
+
+</details>
+
+<details>
+<summary><strong>Inferred-regime pilot</strong> — residual detector + matched planner</summary>
+
+```bash
 ./scripts/run_regime_pilot.sh
 ```
 
-## Reproduce experiments and paper
+Equivalent:
 
 ```bash
-# Ten seeds, three drift types, three methods
-python3 run.py --output results/canonical
-
-# Fast integration check
-python3 run.py --quick --seeds 0 --output results/smoke
-
-# Regenerate manuscript tables and figures from raw canonical outputs
-python3 scripts/generate_paper_assets.py
-
-# Self-contained article fallback with NeurIPS-style sections
-cd paper
-tectonic main.tex
-# Alternatives: latexmk -pdf main.tex, or pdflatex/bibtex passes.
+python3 run.py --protocol regime --profile pilot \
+  --output results/inferred_regime_pilot
 ```
 
-Outputs are `episodes.csv`, `per_seed.csv`, `coverage.csv`, `summary.csv`,
-`results.json`, and plots. Confidence intervals resample seed-level means as
-independent clusters and are bounded to `[0,1]`.
+</details>
 
-## Methods
-
-- `fixed_count`: time-unaware encoder trained on all count-collected records.
-- `time_count`: clock-conditioned encoder trained on exactly the same ordered
-  count-collected records.
-- `fixed_random`: fixed encoder with uniformly random reward-free collection.
-
-All encoders use forward-state prediction and are frozen for downstream DQN.
-The default experiment is intentionally modest and should be treated as a
-diagnostic ablation, not a state-of-the-art benchmark.
-
-## New inferred-regime protocol
-
-Run `python3 run.py --protocol regime --profile quick --output
-results/inferred_regime_quick` for a short check, or use the pilot script above.
-The detector API accepts only `(state, action, next_state)`. Raw transitions,
-detection/recovery metrics, coverage, seed-level summaries, and resumable unit
-checkpoints are written to a result directory distinct from
-`results/canonical`. The oracle-regime comparison is explicitly labeled as an
-unrealistic upper bound.
-
-## Recurrent tabular Detect--Match--Explore
-
-The recurrence-focused study is separate from, and does not overwrite, the
-earlier clock or inferred-regime results:
+<details>
+<summary><strong>Recurrent tabular Detect–Match–Explore</strong></summary>
 
 ```bash
-# Smoke test, predeclared 10-seed pilot, and larger sweep
+python3 run.py --protocol recurrent-tabular --profile quick \
+  --output results/recurrent_tabular_quick
+```
+
+</details>
+
+<details>
+<summary><strong>MiniGrid recurrence</strong></summary>
+
+```bash
+python3 run.py --protocol minigrid-recurrent --profile quick \
+  --output results/minigrid_recurrent_quick
+```
+
+</details>
+
+<details>
+<summary><strong>RFE-Recurrent-Bench</strong></summary>
+
+```bash
+python3 run.py --protocol recurrent-bench --profile quick \
+  --output results/recurrent_bench_quick
+```
+
+</details>
+
+Interrupted runs resume from configuration-hashed checkpoints. Pass `--no-resume` to recompute.
+
+## Pick a study
+
+Click a protocol, copy the command, change `--profile` if you need a larger budget.
+
+| Protocol | What it does | Profiles |
+| --- | --- | --- |
+| `clock` | Frozen encoders + DQN under gridworld drift | `--quick` |
+| `regime` | Online residual detector, no public clock | `quick`, `pilot`, `full` |
+| `recurrent-tabular` | Detect–Match–Explore on recurring MDPs | `quick`, `pilot`, `full`, `certified`, `certified-full` |
+| `minigrid-recurrent` | Recurring MiniGrid with swapped controls | `quick`, `pilot`, `fourrooms`, `conflict`, `conflict-full` |
+| `recurrent-bench` | Generative four-task recurrence bench | `quick`, `pilot`, `full`, `stress` |
+
+<details>
+<summary><code>clock</code> — frozen representations under drift</summary>
+
+The explorer is a **count-bonus heuristic**, not UCRL-RFE. The time-conditioned encoder sees a normalized public clock, never the drift boundary.
+
+```bash
+python3 run.py --protocol clock --output results/canonical
+python3 run.py --quick --seeds 0 --output results/smoke
+```
+
+Methods trained on the same ordered transitions:
+
+- `fixed_count` — time-unaware encoder, count-bonus collection
+- `time_count` — clock-conditioned encoder, same collection
+- `fixed_random` — fixed encoder, uniform random collection
+
+Canonical CLI: `run.py`. Root `rfe_drift.py` and `run_drift_experiments.py` are legacy.
+
+</details>
+
+<details>
+<summary><code>regime</code> — infer context from forward-model residuals</summary>
+
+The detector API accepts only `(state, action, next_state)`.
+
+```bash
+python3 run.py --protocol regime --profile quick \
+  --output results/inferred_regime_quick
+python3 run.py --protocol regime --profile pilot \
+  --output results/inferred_regime_pilot
+python3 run.py --protocol regime --profile full \
+  --output results/inferred_regime_full
+```
+
+Comparisons: `stationary_no_context`, `inferred_regime`, and `oracle_regime_upper_bound` (unrealistic upper bound).
+
+</details>
+
+<details>
+<summary><code>recurrent-tabular</code> — Detect–Match–Explore</summary>
+
+```bash
 python3 run.py --protocol recurrent-tabular --profile quick \
   --output results/recurrent_tabular_quick
 python3 run.py --protocol recurrent-tabular --profile pilot \
   --output results/recurrent_tabular_pilot
-python3 run.py --protocol recurrent-tabular --profile full \
-  --output results/recurrent_tabular_full
+python3 run.py --protocol recurrent-tabular --profile certified \
+  --output results/recurrent_tabular_certified
 ```
 
-Completed units resume from configuration-hashed JSON checkpoints; pass
-`--no-resume` to recompute. The protocol compares pooled,
-restart-without-reuse, clustering without quarantine, recurrence-aware
-Detect--Match--Explore, oracle-boundary, oracle-mode, and sliding-window
-models. Rewards are introduced only after collection and deployment mode
-diagnosis uses only a transition prefix. Raw transitions, diagnosis decisions,
-per-reward value gaps, worst-reward gaps, and recurrence sample savings are
-retained.
+Compares pooled, restart, clustering, recurrence-aware DME, oracle-boundary, oracle-mode, and sliding-window models. Rewards appear only after collection. Values and gaps are in `[0, 1]`.
 
-Planning and evaluation use a 20-stage episodic dynamic program and
-stage-indexed nonstationary policies. Every per-stage reward is at most
-`1 / 20`, so every pathwise return, value, and gap is in `[0, 1]`, matching the
-formal reward convention.
+</details>
 
-The corrected 10-seed, 40-unit CPU pilot **fails** the strengthened recurrence
-gate. Recurrence improves the paired normalized worst-reward gap by 0.00110
-(95% paired bootstrap CI `[0.00057, 0.00178]`) over restart, below the
-predeclared meaningful margin of 0.01. Deployment acceptance is 1.0 and mean
-sample savings are 48.12, but a statistically positive, numerically tiny effect
-is not treated as practically meaningful.
+<details>
+<summary><code>minigrid-recurrent</code> — symbolic MiniGrid scale gate</summary>
 
-## Recurring MiniGrid scale study
-
-The controlled scale study uses the maintained `minigrid==3.1.0` package and
-native 7x7 symbolic partial observations. Install dependencies and reproduce
-the checked quick and pilot runs with:
+Uses `minigrid==3.1.0` and 7×7 symbolic partial observations. Mission strings, native rewards, and regime IDs are hidden.
 
 ```bash
-python3 -m pip install -r requirements.txt
-python3 run.py --protocol minigrid-recurrent --profile quick \
-  --output results/minigrid_recurrent_quick
-python3 run.py --protocol minigrid-recurrent --profile pilot \
-  --output results/minigrid_recurrent_pilot
-```
-
-Regime switches occur only between episodes. One regime uses native controls
-and observations; the other swaps left/right dynamics and mirrors/remaps the
-partial observation. Mission strings, environment rewards, regime IDs, and
-switch metadata are unavailable to collection, learned PCA/k-means features,
-transition-signature matching, and deployment diagnosis. Arbitrary task
-rewards are attached to frozen transitions after collection.
-
-The checked 10-seed pilot took 39.76 seconds wall time and the predeclared
-MiniGrid gate **fails**. Recurrence-aware worst-task gap is 0.0492 versus
-0.2648 for restart, deployment-ID error is 0.20, and mean recurrence savings
-are 6.8 samples. However, pooled worst-task gap is 0.0, so recurrence-aware is
-worse than the pooled baseline. This is a no-go for further visual scaling,
-not evidence for recurrence-aware dominance.
-
-Current limitations are important: observations are symbolic rather than RGB;
-there are only two deterministic regimes in Empty-6x6; policies are
-memoryless over learned latent states despite partial observability; and the
-label-aware oracle is an empirical upper control, not an exact optimal value.
-
-## Recurring MiniGrid scale study
-
-The next scale gate uses the maintained `minigrid==3.1.0` package and symbolic
-7x7 egocentric observations. Two reset-level regimes recur: one uses native
-controls/observations and one swaps left/right dynamics while mirroring and
-color-remapping observations. Regime labels and native rewards are removed
-from every deployable interface.
-
-```bash
-# Five-seed integration profile
-python3 run.py --protocol minigrid-recurrent --profile quick \
-  --output results/minigrid_recurrent_quick
-
-# Predeclared ten-seed CPU pilot (tests first)
 ./scripts/run_minigrid_pilot.sh
+python3 run.py --protocol minigrid-recurrent --profile fourrooms \
+  --output results/minigrid_fourrooms_pilot
 ```
 
-Collection and diagnosis are reward-free. Full partial observations are saved
-in `raw_transitions.csv`, so new observation-based rewards can be attached
-after collection. Pooled, restart, recurrence-aware, and explicitly privileged
-oracle-upper-bound planners use the same learned PCA/k-means state abstraction.
-Configuration-hashed per-seed checkpoints make interrupted runs resumable.
-See `EXPERIMENTS.md` for outputs, gate criteria, and limitations.
+</details>
 
-## Current checked result
+<details>
+<summary><code>recurrent-bench</code> — swap-chain, RiverSwim, DeepSea, four rooms</summary>
 
-The included ten-seed run does **not** show an advantage for time conditioning.
-Goal drift has zero success for all methods. Under transition-noise drift,
-post-drift mean success is 0.335 (`fixed_count`, CI `[0.110, 0.575]`), 0.180
-(`time_count`, `[0.000, 0.405]`), and 0.200 (`fixed_random`,
-`[0.035, 0.410]`). Wall-drift success is zero for all methods. A predeclared
-500/1500/4000-step diagnostic was non-monotonic, indicating sparse-reward DQN
-instability rather than evidence that simply increasing this small budget
-resolves the failures. See `paper/main.tex` for limitations.
+```bash
+python3 run.py --protocol recurrent-bench --profile quick \
+  --output results/recurrent_bench_quick
+python3 run.py --protocol recurrent-bench --profile pilot \
+  --output results/recurrent_bench_pilot
+```
+
+Task table and gate criteria: [`rfe_drift/benchmark/README.md`](rfe_drift/benchmark/README.md).
+
+</details>
+
+## What gets written
+
+Every study writes a result directory you pass with `--output`. Typical files:
+
+| File | Contents |
+| --- | --- |
+| `summary.csv` / `results.json` | Seed-level means and bounded 95% cluster-bootstrap CIs |
+| `per_seed.csv` | Independent units used for those intervals |
+| `transitions.csv` / `raw_transitions.csv` | Reward-free trajectories (protocol-dependent) |
+| `checkpoints/` | Resumable per-unit JSON |
+
+Clock-study extras: `episodes.csv`, `coverage.csv`, `post_drift_success.png`.
+
+## Layout
+
+```text
+run.py                 canonical harness
+rfe_drift/             environment, detectors, planners, MiniGrid, bench
+scripts/               pilots and asset helpers
+tests/                 pytest suite
+results/canonical/     checked clock-study CSV/JSON
+```
+
+<details>
+<summary>Package map</summary>
+
+```text
+rfe_drift/
+├── env/             drift gridworld
+├── exploration/     count-bonus explorer
+├── representations/ frozen encoders
+├── rl/              downstream DQN
+├── protocol.py      inferred-regime study
+├── tabular.py       recurring MDP + DME
+├── recurrent_study.py
+├── minigrid_study.py
+└── benchmark/       RFE-Recurrent-Bench
+```
+
+</details>
+
+## Checked results
+
+These are diagnostic, not SOTA claims.
+
+| Study | Gate | Takeaway |
+| --- | --- | --- |
+| Clock / time conditioning | fail | No advantage for time conditioning; goal and wall drift stay at 0 success |
+| Recurrence-aware tabular pilot | fail | Tiny positive gap vs restart, below the 0.01 margin |
+| MiniGrid Empty-6x6 pilot | fail | Recurrence-aware worse than pooled |
+| RFE-Recurrent-Bench 10-seed pilot | pass | DME beats restart and pooling on the predeclared gate |
+
+Clock-study post-drift success under **transition noise** (10 seeds, 95% CI):
+
+| Method | Mean | CI |
+| --- | --- | --- |
+| `fixed_count` | 0.335 | [0.110, 0.575] |
+| `time_count` | 0.180 | [0.000, 0.405] |
+| `fixed_random` | 0.200 | [0.035, 0.410] |
+
+More protocol detail: [`EXPERIMENTS.md`](EXPERIMENTS.md) and [`USAGE.md`](USAGE.md).
+
+## Design constraints
+
+- One global drift clock that survives episode resets
+- The transition that hits the sudden-drift index uses the drifted model
+- Coverage is over reachable states, not every grid cell
+- Identical clocks for environment transitions and encoder evaluation
+- Seeded Python, NumPy, PyTorch, env, collector, replay, and policies
+- Bootstrap CIs are clustered on independent seed means and clipped to `[0, 1]`

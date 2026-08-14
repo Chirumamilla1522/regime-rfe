@@ -34,10 +34,21 @@ results/*
 !results/canonical/coverage.csv
 !results/canonical/summary.csv
 !results/canonical/results.json
-!results/canonical/post_drift_success.pdf
 !results/canonical/post_drift_success.png
 !results/budget_check/
 !results/budget_check/per_seed.csv
 !results/budget_check/summary.json
 wandb/
+
+# Manuscripts and compiled PDFs stay local; this remote is code-only
+paper/
+*.pdf
+*.blg
+*.aux
+*.bbl
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
 

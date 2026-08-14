@@ -20,13 +20,7 @@ Use the bounded smoke configuration:
 python3 run.py --quick --seeds 0 --output results/smoke
 ```
 
-Regenerate paper assets and compile:
-
-```bash
-python3 scripts/generate_paper_assets.py
-cd paper
-tectonic main.tex
-```
+Protocol chooser and copy-paste commands are in `README.md`.
 
 The canonical method names are `fixed_count`, `time_count`, and
 `fixed_random`. “Count” denotes a local count-bonus heuristic. It must not be

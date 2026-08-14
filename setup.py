@@ -13,11 +13,11 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 setup(
     name="rfe-drift-gridworld",
     version="0.1.0",
-    author="mxberner",
-    description="Robust Reward-Free Exploration under Distributional Drift",
+    author="Chirumamilla1522",
+    description="Regime-conditional reward-free exploration under recurrent dynamics",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/mxberner/rfe-drift-gridworld",
+    url="https://github.com/Chirumamilla1522/regime-rfe",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
